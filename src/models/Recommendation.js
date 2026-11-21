@@ -9,6 +9,10 @@ const recommendationSchema = new mongoose.Schema(
       minlength: 2,
       maxlength: 150
     },
+    nameKey: {
+      type: String,
+      trim: true
+    },
     category: {
       type: String,
       required: true,
@@ -53,10 +57,34 @@ const recommendationSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+function normalizeName(value) {
+  return value
+    .normalize("NFKC")
+    .trim()
+    .replace(/\s+/g, " ")
+    .toLowerCase();
+}
+
+recommendationSchema.pre("validate", function () {
+  if (typeof this.name === "string") {
+    this.nameKey = normalizeName(this.name);
+  }
+});
+
 recommendationSchema.index({
   isActive: 1,
   category: 1
 });
+
+recommendationSchema.index(
+  { nameKey: 1 },
+  {
+    unique: true,
+    partialFilterExpression: {
+      nameKey: { $type: "string" }
+    }
+  }
+);
 
 module.exports = mongoose.model(
   "Recommendation",
