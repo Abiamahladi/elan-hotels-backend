@@ -8,6 +8,7 @@ const roomRoutes = require("./routes/room.routes");
 const bookingRoutes = require("./routes/booking.routes");
 const checkInRoutes = require("./routes/preArrivalCheckIn.routes");
 const conciergeRoutes = require("./routes/conciergeRequest.routes");
+const recommendationRoutes = require("./routes/recommendation.routes");
 const errorHandler = require("./middleware/error.middleware");
 
 const app = express();
@@ -79,6 +80,7 @@ app.use("/rooms", apiLimiter, roomRoutes);
 app.use("/bookings", apiLimiter, bookingLimiter, bookingRoutes);
 app.use("/check-ins", apiLimiter, bookingLimiter, checkInRoutes);
 app.use("/concierge/requests", apiLimiter, bookingLimiter, conciergeRoutes);
+app.use("/recommendations", apiLimiter, recommendationRoutes);
 
 app.use(errorHandler);
 
