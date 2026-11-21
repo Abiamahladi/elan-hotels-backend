@@ -6,6 +6,7 @@ const { rateLimit } = require("express-rate-limit");
 
 const roomRoutes = require("./routes/room.routes");
 const bookingRoutes = require("./routes/booking.routes");
+const checkInRoutes = require("./routes/preArrivalCheckIn.routes");
 const errorHandler = require("./middleware/error.middleware");
 
 const app = express();
@@ -75,6 +76,7 @@ app.get("/health", (req, res) => {
 
 app.use("/rooms", apiLimiter, roomRoutes);
 app.use("/bookings", apiLimiter, bookingLimiter, bookingRoutes);
+app.use("/check-ins", apiLimiter, bookingLimiter, checkInRoutes);
 
 app.use(errorHandler);
 
